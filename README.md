@@ -7,6 +7,8 @@ Repository with daemon to send Telegram notifies when ISS passes by your locatio
 ### Manual
 
 ```
+pip3 install -r requirements.txt
+
 export ISS_PASS_LOCATION=<lat>,<lon>
 export ISS_PASS_TG_TOKEN=<token>
 export ISS_PASS_TG_ID=<ID1>,<ID2>
