@@ -7,9 +7,10 @@ from isspass import ISSPass
 if __name__ == '__main__':
     try:
         loc = os.environ['ISS_PASS_LOCATION'].split(',')
-        url = os.environ['ISS_PASS_URL']
+        tg_token = os.environ['ISS_PASS_TG_TOKEN']
+        tg_id = os.environ['ISS_PASS_TG_ID']
     except KeyError:
-        print('Specify location of interest as ISS_PASS_LOCATION env variable in "lat,lon" format and notification URL as ISS_PASS_URL variable.')
+        print('Specify location of interest as ISS_PASS_LOCATION env variable in "lat,lon" format and Telegram Token/recipient ID as ISS_PASS_TG_TOKEN/_ID variables.')
         sys.exit(1)
 
     ISS = ISSPass(loc[0], loc[1])
@@ -17,11 +18,14 @@ if __name__ == '__main__':
     while True:
         above = ISS.is_above()
         if above:
-            try:
-                requests.put(url)
-            except:
-                print('Error occured while calling notify URL.')
-                continue
+            for recipient in tg_id.split(','):
+                requests.post(
+                    URI = 'https://api.telegram.org/bot' + tg_token + '/sendMessage',
+                    {
+                        'chat_id': int(recipient),
+                        'text': '🚀 ISS is passing over you!',
+                        'parse_mode': 'Markdown'
+                    })
             print('Notify sent, sleeping a little to prevent spam.')
             time.sleep(30)
             continue
