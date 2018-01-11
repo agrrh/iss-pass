@@ -21,7 +21,7 @@ if __name__ == '__main__':
             for recipient in tg_id.split(','):
                 requests.post(
                     URI = 'https://api.telegram.org/bot' + tg_token + '/sendMessage',
-                    {
+                    json={
                         'chat_id': int(recipient),
                         'text': '🚀 ISS is passing over you!',
                         'parse_mode': 'Markdown'
