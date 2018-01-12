@@ -13,10 +13,18 @@ if __name__ == '__main__':
         print('Specify location of interest as ISS_PASS_LOCATION env variable in "lat,lon" format and Telegram Token/recipient ID as ISS_PASS_TG_TOKEN/_ID variables.')
         sys.exit(1)
 
+    i = 0
     ISS = ISSPass(loc[0], loc[1])
 
     while True:
-        above = ISS.is_above()
+        loc = ISS._get_iss_location()
+
+        if i % 100 == 0:
+            print(ISS.location, loc)
+        i += 1
+
+        above = ISS.is_above(loc)
+
         if above:
             for recipient in tg_id.split(','):
                 requests.post(

@@ -9,7 +9,7 @@ class ISSPass(object):
         self.location = (float(lat), float(lon))
         self.deviation = deviation
 
-    def __get_iss_location(self):
+    def _get_iss_location(self):
         """Return ISS location."""
         api_url = 'http://api.open-notify.org/iss-now.json'
         """{
@@ -35,17 +35,15 @@ class ISSPass(object):
         except KeyError:
             return False
 
-    def is_above(self):
+    def is_above(self, loc=None):
         """Check if passage is between sane deviation, return True if so."""
-        iss_location = self.__get_iss_location()
+        iss_location = loc if loc is not None else self._get_iss_location()
 
         if not iss_location:
             return None
 
         lat_abs = abs(iss_location[0] - self.location[0])
         lon_abs = abs(iss_location[1] - self.location[1])
-
-        print(self.location, iss_location)
 
         if math.sqrt(lat_abs**2 + lon_abs**2) < self.deviation:
             return True
